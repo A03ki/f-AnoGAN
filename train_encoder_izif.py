@@ -81,8 +81,8 @@ def train_encoder_izif(opt, dataloader, device, kappa=1.0):
 
                 if batches_done % opt.sample_interval == 0:
                     fake_z = encoder(fake_imgs)
-                    configuration_imgs = generator(fake_z)
-                    save_image(configuration_imgs.data[:25],
+                    reconfiguration_imgs = generator(fake_z)
+                    save_image(reconfiguration_imgs.data[:25],
                                f"results/images_e/{batches_done:06}.png",
                                nrow=5, normalize=True)
 
