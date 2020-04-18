@@ -30,13 +30,13 @@ Please run below in order.
 
 ### Step: 1
 
-```python
+```
 python train_wgangp.py --training_label 1
 ```
 
 ### Step: 2
 
-```pyhton
+```
 python train_encoder_izif.py --training_label 1
 ```
 
