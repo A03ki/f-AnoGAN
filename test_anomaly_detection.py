@@ -9,21 +9,17 @@ from model import Generator, Discriminator, Encoder
 from tools import SimpleDataset, load_mnist
 
 
-def test_anomaly_detection(opt, dataloader, device, kappa=1.0):
-    img_shape = (opt.channels, opt.img_size, opt.img_size)
-
-    generator = Generator(img_shape, opt.latent_dim)
-    discriminator = Discriminator(img_shape)
-    encoder = Encoder(img_shape)
+def test_anomaly_detection(opt, generator, discriminator, encoder,
+                           dataloader, device, kappa=1.0):
     generator.load_state_dict(torch.load("results/generator"))
     discriminator.load_state_dict(torch.load("results/discriminator"))
     encoder.load_state_dict(torch.load("results/encoder"))
 
-    criterion = nn.MSELoss()
-
     generator.to(device).eval()
     discriminator.to(device).eval()
     encoder.to(device).eval()
+
+    criterion = nn.MSELoss()
 
     with open("results/score.csv", "w") as f:
         f.write("label,img_distance,anomaly_score,z_distance\n")
@@ -66,7 +62,14 @@ def main(opt):
                                     transforms.Normalize([0.5], [0.5])])
                                )
     test_dataloader = DataLoader(test_mnist, batch_size=1, shuffle=False)
-    test_anomaly_detection(opt, test_dataloader, device)
+
+    img_shape = (opt.channels, opt.img_size, opt.img_size)
+    generator = Generator(img_shape, opt.latent_dim)
+    discriminator = Discriminator(img_shape)
+    encoder = Encoder(img_shape)
+
+    test_anomaly_detection(opt, generator, discriminator, encoder,
+                           test_dataloader, device)
 
 
 if __name__ == "__main__":

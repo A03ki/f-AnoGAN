@@ -18,12 +18,8 @@ Licensed under MIT
 """
 
 
-def train_encoder_izif(opt, dataloader, device, kappa=1.0):
-    img_shape = (opt.channels, opt.img_size, opt.img_size)
-
-    generator = Generator(img_shape, opt.latent_dim)
-    discriminator = Discriminator(img_shape)
-    encoder = Encoder(img_shape)
+def train_encoder_izif(opt, generator, discriminator, encoder,
+                       dataloader, device, kappa=1.0):
     generator.load_state_dict(torch.load("results/generator"))
     discriminator.load_state_dict(torch.load("results/discriminator"))
 
@@ -103,7 +99,14 @@ def main(opt):
                                 )
     train_dataloader = DataLoader(train_mnist, batch_size=opt.batch_size,
                                   shuffle=True)
-    train_encoder_izif(opt, train_dataloader, device)
+
+    img_shape = (opt.channels, opt.img_size, opt.img_size)
+    generator = Generator(img_shape, opt.latent_dim)
+    discriminator = Discriminator(img_shape)
+    encoder = Encoder(img_shape)
+
+    train_encoder_izif(opt, generator, discriminator, encoder,
+                       train_dataloader, device)
 
 
 if __name__ == "__main__":

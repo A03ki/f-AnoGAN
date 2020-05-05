@@ -36,12 +36,8 @@ def compute_gradient_penalty(D, real_samples, fake_samples, device):
     return gradient_penalty
 
 
-def train_wgangp(opt, dataloader, device, lambda_gp=10):
-    img_shape = (opt.channels, opt.img_size, opt.img_size)
-
-    generator = Generator(img_shape, opt.latent_dim)
-    discriminator = Discriminator(img_shape)
-
+def train_wgangp(opt, generator, discriminator,
+                 dataloader, device, lambda_gp=10):
     generator.to(device)
     discriminator.to(device)
 
@@ -138,7 +134,12 @@ def main(opt):
                                 )
     train_dataloader = DataLoader(train_mnist, batch_size=opt.batch_size,
                                   shuffle=True)
-    train_wgangp(opt, train_dataloader, device)
+
+    img_shape = (opt.channels, opt.img_size, opt.img_size)
+    generator = Generator(img_shape, opt.latent_dim)
+    discriminator = Discriminator(img_shape)
+
+    train_wgangp(opt, generator, discriminator, train_dataloader, device)
 
 
 if __name__ == "__main__":
