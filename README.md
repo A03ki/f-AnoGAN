@@ -28,6 +28,13 @@ scikit-learn
 
 Please run below in order.
 
+### Step: 0
+
+```
+python setup.py install
+cd mnist
+```
+
 ### Step: 1
 
 ```
