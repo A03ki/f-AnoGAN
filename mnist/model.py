@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 """
-These codes are:
+The code is:
 Copyright (c) 2018 Erik Linder-Norén
 Licensed under MIT
 (https://github.com/eriklindernoren/PyTorch-GAN/blob/master/LICENSE)

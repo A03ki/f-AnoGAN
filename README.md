@@ -12,7 +12,7 @@ Github
 - [tSchlegl/f-AnoGAN: Code for reproducing f-AnoGAN training and anomaly scoring](https://github.com/tSchlegl/f-AnoGAN)
 - [PyTorch-GAN/wgan_gp.py at master · eriklindernoren/PyTorch-GAN](https://github.com/eriklindernoren/PyTorch-GAN/blob/master/implementations/wgan_gp/wgan_gp.py)
 
-`model.py`, `train_wgangp.py` and `train_encoder_izif.py` are modified eriklindernoren's `wgan_gp.py` for f-AnoGAN.
+`fanogan/model.py`, `fanogan/train_wgangp.py` and `fanogan/train_encoder_izif.py` are modified eriklindernoren's `wgan_gp.py` for f-AnoGAN.
 
 ## Requirements
 
@@ -27,6 +27,13 @@ scikit-learn
 ## Usage
 
 Please run below in order.
+
+### Step: 0
+
+```
+python setup.py install
+cd mnist
+```
 
 ### Step: 1
 
