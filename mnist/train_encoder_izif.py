@@ -9,6 +9,8 @@ from tools import SimpleDataset, load_mnist
 
 
 def main(opt):
+    if type(opt.seed) is int:
+        torch.manual_seed(opt.seed)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     (x_train, y_train), _ = load_mnist("dataset",
                                        training_label=opt.training_label,
@@ -67,6 +69,8 @@ if __name__ == "__main__":
                         help="label for normal images")
     parser.add_argument("--split_rate", type=float, default=0.8,
                         help="rate of split for normal training data")
+    parser.add_argument("--seed", type=int, default=None,
+                        help="value of a random seed")
     opt = parser.parse_args()
 
     main(opt)
