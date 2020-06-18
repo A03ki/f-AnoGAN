@@ -74,7 +74,7 @@ class Encoder(nn.Module):
             nn.LeakyReLU(0.2, inplace=True),
             nn.Linear(512, 256),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Linear(256, 100),
+            nn.Linear(256, opt.latent_dim),
             nn.Tanh()
         )
 
