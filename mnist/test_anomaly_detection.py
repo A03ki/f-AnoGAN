@@ -23,10 +23,9 @@ def main(opt):
                                )
     test_dataloader = DataLoader(test_mnist, batch_size=1, shuffle=False)
 
-    img_shape = (opt.channels, opt.img_size, opt.img_size)
-    generator = Generator(img_shape, opt.latent_dim)
-    discriminator = Discriminator(img_shape)
-    encoder = Encoder(img_shape)
+    generator = Generator(opt)
+    discriminator = Discriminator(opt)
+    encoder = Encoder(opt)
 
     test_anomaly_detection(opt, generator, discriminator, encoder,
                            test_dataloader, device)
