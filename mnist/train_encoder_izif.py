@@ -24,10 +24,9 @@ def main(opt):
     train_dataloader = DataLoader(train_mnist, batch_size=opt.batch_size,
                                   shuffle=True)
 
-    img_shape = (opt.channels, opt.img_size, opt.img_size)
-    generator = Generator(img_shape, opt.latent_dim)
-    discriminator = Discriminator(img_shape)
-    encoder = Encoder(img_shape)
+    generator = Generator(opt)
+    discriminator = Discriminator(opt)
+    encoder = Encoder(opt)
 
     train_encoder_izif(opt, generator, discriminator, encoder,
                        train_dataloader, device)

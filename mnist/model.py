@@ -11,9 +11,9 @@ Licensed under MIT
 
 
 class Generator(nn.Module):
-    def __init__(self, img_shape, latent_dim):
+    def __init__(self, opt):
         super().__init__()
-        self.img_shape = img_shape
+        self.img_shape = (opt.channels, opt.img_size, opt.img_size)
 
         def block(in_feat, out_feat, normalize=True):
             layers = [nn.Linear(in_feat, out_feat)]
@@ -23,11 +23,11 @@ class Generator(nn.Module):
             return layers
 
         self.model = nn.Sequential(
-            *block(latent_dim, 128, normalize=False),
+            *block(opt.latent_dim, 128, normalize=False),
             *block(128, 256),
             *block(256, 512),
             *block(512, 1024),
-            nn.Linear(1024, int(np.prod(img_shape))),
+            nn.Linear(1024, int(np.prod(self.img_shape))),
             nn.Tanh()
             )
 
@@ -38,8 +38,9 @@ class Generator(nn.Module):
 
 
 class Discriminator(nn.Module):
-    def __init__(self, img_shape):
+    def __init__(self, opt):
         super().__init__()
+        img_shape = (opt.channels, opt.img_size, opt.img_size)
 
         self.features = nn.Sequential(
             nn.Linear(int(np.prod(img_shape)), 512),
@@ -64,15 +65,16 @@ class Discriminator(nn.Module):
 
 
 class Encoder(nn.Module):
-    def __init__(self, img_shape):
+    def __init__(self, opt):
         super().__init__()
+        img_shape = (opt.channels, opt.img_size, opt.img_size)
 
         self.model = nn.Sequential(
             nn.Linear(int(np.prod(img_shape)), 512),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Linear(512, 256),
             nn.LeakyReLU(0.2, inplace=True),
-            nn.Linear(256, 100),
+            nn.Linear(256, opt.latent_dim),
             nn.Tanh()
         )
 
