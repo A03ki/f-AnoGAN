@@ -57,7 +57,7 @@ python test_anomaly_detection.py --training_label 1
 
 After Step: 3, `score.csv` will be generated in the directory `results`.
 
-See `visualization.ipynb` about data visualization for `score.csv`.
+See [f-AnoGAN_MNIST.ipynb](https://colab.research.google.com/drive/1mnuMH2gZH5RR47haP9r8Rv568G1mjJ1T?usp=sharing) about data visualization for `score.csv`.
 
 
 ## Colaboratory
