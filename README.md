@@ -40,13 +40,13 @@ cd mnist
 ### Step: 1
 
 ```
-python train_wgangp.py --training_label 1
+python train_wgangp.py --training_label 1 --seed 2 --n_epochs 20
 ```
 
 ### Step: 2
 
 ```
-python train_encoder_izif.py --training_label 1
+python train_encoder_izif.py --training_label 1 --seed 2 --n_epochs 20
 ```
 
 ### Step: 3
