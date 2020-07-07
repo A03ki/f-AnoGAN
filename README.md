@@ -28,7 +28,7 @@ scikit-learn
 
 ## Usage for training and test the MNIST dataset
 
-Please run below in order.
+Please run below in order on the CPU.
 
 ### Step: 0
 
