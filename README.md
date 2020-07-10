@@ -59,6 +59,14 @@ After Step: 3, `score.csv` will be generated in the directory `results`.
 
 See [f-AnoGAN_MNIST.ipynb](https://colab.research.google.com/drive/1mnuMH2gZH5RR47haP9r8Rv568G1mjJ1T?usp=sharing) about data visualization for `score.csv`.
 
+### Step: 4
+
+```
+python save_compared_images.py --seed 4 --n_iters 0 --n_grid_lines 10
+```
+
+Compared images are saved under `f-AnoGAN/mnist/results/images_diff`.
+
 ### Visualization
 
 ![ROC AUC](./images/mnist_roc_auc.png)
