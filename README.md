@@ -64,6 +64,7 @@ See [f-AnoGAN_MNIST.ipynb](https://colab.research.google.com/drive/1mnuMH2gZH5RR
 ![ROC AUC](./images/mnist_roc_auc.png)
 ![PR AUC](./images/mnist_pr_auc.png)
 ![Anomaly Scores](./images/mnist_anomaly_scores.png)
+![Compared Images](./images/mnist_compared_images.png)
 
 ## Colaboratory
 
