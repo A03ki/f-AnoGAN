@@ -24,6 +24,7 @@ PyTorch 1.x
 Matplotlib  
 Numpy  
 pandas  
+Pillow  
 scikit-learn
 
 ## Usage for training and test the MNIST dataset
