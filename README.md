@@ -24,6 +24,7 @@ PyTorch 1.x
 Matplotlib  
 Numpy  
 pandas  
+Pillow  
 scikit-learn
 
 ## Usage for training and test the MNIST dataset
@@ -59,12 +60,20 @@ After Step: 3, `score.csv` will be generated in the directory `results`.
 
 See [f-AnoGAN_MNIST.ipynb](https://colab.research.google.com/drive/1mnuMH2gZH5RR47haP9r8Rv568G1mjJ1T?usp=sharing) about data visualization for `score.csv`.
 
+### Step: 4
+
+```
+python save_compared_images.py --seed 4 --n_iters 0 --n_grid_lines 10
+```
+
+Compared images are saved under `f-AnoGAN/mnist/results/images_diff`.
+
 ### Visualization
 
-![リツイートまでの流れ](./images/mnist_roc_auc.png)
-![リツイートまでの流れ](./images/mnist_pr_auc.png)
-![リツイートまでの流れ](./images/mnist_anomaly_scores.png)
-
+![ROC AUC](./images/mnist_roc_auc.png)
+![PR AUC](./images/mnist_pr_auc.png)
+![Anomaly Scores](./images/mnist_anomaly_scores.png)
+![Compared Images](./images/mnist_compared_images.png)
 
 ## Colaboratory
 

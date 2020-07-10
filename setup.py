@@ -7,7 +7,7 @@ setup(
     description="Test f-AnoGAN by using datasets.",
     author="A03ki",
     install_requires=["torch", "torchvision", "matplotlib",
-                      "numpy", "pandas", "scikit-learn"],
+                      "numpy", "pandas", "Pillow", "scikit-learn"],
     url="https://github.com/A03ki/f-AnoGAN",
     license="MIT License",
     packages=["fanogan"]
