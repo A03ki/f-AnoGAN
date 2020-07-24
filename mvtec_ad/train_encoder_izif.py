@@ -1,13 +1,11 @@
-import os
 import torch
 from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
-from torchvision import datasets
+from torchvision4ad.datasets import MVTecAD
 
 from fanogan.train_encoder_izif import train_encoder_izif
 
 from model import Generator, Discriminator, Encoder
-from tools import MVTecAD, MVTECAD_DATASET_NAMES
 
 
 def main(opt):
@@ -15,21 +13,14 @@ def main(opt):
         torch.manual_seed(opt.seed)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    mvtec_ad = MVTecAD()
-
-    if not os.path.isdir(opt.dataset_name) or opt.force_download:
-        mvtec_ad.download(opt.dataset_name)
-        mvtec_ad.extract(opt.dataset_name)
-
-    images = datasets.ImageFolder(f"./{opt.dataset_name}/train",
-                                  transform=transforms.Compose(
-                                    [transforms.Resize([opt.img_size]*2),
-                                     transforms.RandomHorizontalFlip(),
-                                     transforms.ToTensor(),
-                                     transforms.Normalize([0.5, 0.5, 0.5],
-                                                          [0.5, 0.5, 0.5])])
-                                  )
-    train_dataloader = DataLoader(images, batch_size=opt.batch_size,
+    transform = transforms.Compose([transforms.Resize([opt.img_size]*2),
+                                    transforms.RandomHorizontalFlip(),
+                                    transforms.ToTensor(),
+                                    transforms.Normalize([0.5, 0.5, 0.5],
+                                                         [0.5, 0.5, 0.5])])
+    mvtec_ad = MVTecAD(".", opt.dataset_name, train=True, transform=transform,
+                       download=True)
+    train_dataloader = DataLoader(mvtec_ad, batch_size=opt.batch_size,
                                   shuffle=True)
 
     generator = Generator(opt)
@@ -52,7 +43,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("dataset_name", type=str,
-                        choices=MVTECAD_DATASET_NAMES,
+                        choices=MVTecAD.available_dataset_names,
                         help="name of MVTec Anomaly Detection Datasets")
     parser.add_argument("--force_download", "-f", action="store_true",
                         help="flag of force download")
