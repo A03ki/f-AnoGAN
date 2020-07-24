@@ -18,7 +18,7 @@ def main(opt):
                                     transforms.ToTensor(),
                                     transforms.Normalize([0.5, 0.5, 0.5],
                                                          [0.5, 0.5, 0.5])])
-    mvtec_ad = MVTecAD(".", opt.dataset_name, train=False, transform=transform,
+    mvtec_ad = MVTecAD(".", opt.dataset_name, train=True, transform=transform,
                        download=True)
     train_dataloader = DataLoader(mvtec_ad, batch_size=opt.batch_size,
                                   shuffle=True)
