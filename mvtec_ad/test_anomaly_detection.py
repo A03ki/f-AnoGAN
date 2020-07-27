@@ -9,8 +9,6 @@ from model import Generator, Discriminator, Encoder
 
 
 def main(opt):
-    if type(opt.seed) is int:
-        torch.manual_seed(opt.seed)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     transform = transforms.Compose([transforms.Resize([opt.img_size]*2),
@@ -52,8 +50,6 @@ if __name__ == "__main__":
                         help="size of each image dimension")
     parser.add_argument("--channels", type=int, default=3,
                         help="number of image channels")
-    parser.add_argument("--seed", type=int, default=None,
-                        help="value of a random seed")
     opt = parser.parse_args()
 
     main(opt)
