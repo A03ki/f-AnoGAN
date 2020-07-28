@@ -35,9 +35,6 @@ def test_anomaly_detection(opt, generator, discriminator, encoder,
 
         z_distance = criterion(fake_z, real_z)
 
-        print(f"{label.item()}, {img_distance}, "
-              f"{anomaly_score}, {z_distance}\n")
-
         with open("results/score.csv", "a") as f:
             f.write(f"{label.item()},{img_distance},"
                     f"{anomaly_score},{z_distance}\n")
