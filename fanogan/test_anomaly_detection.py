@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from torch.utils.model_zoo import tqdm
 
 
 def test_anomaly_detection(opt, generator, discriminator, encoder,
@@ -17,7 +18,7 @@ def test_anomaly_detection(opt, generator, discriminator, encoder,
     with open("results/score.csv", "w") as f:
         f.write("label,img_distance,anomaly_score,z_distance\n")
 
-    for (img, label) in dataloader:
+    for (img, label) in tqdm(dataloader):
 
         real_img = img.to(device)
 
