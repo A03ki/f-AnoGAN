@@ -17,7 +17,7 @@ def test_anomaly_detection(opt, generator, discriminator, encoder,
     with open("results/score.csv", "w") as f:
         f.write("label,img_distance,anomaly_score,z_distance\n")
 
-    for i, (img, label) in enumerate(dataloader):
+    for (img, label) in dataloader:
 
         real_img = img.to(device)
 
