@@ -27,30 +27,32 @@ pandas
 Pillow  
 scikit-learn
 
-## Usage for training and test the MNIST dataset
+## Usage for training and test a dataset
+
+### MNIST
 
 Please run below in order on the CPU.
 
-### Step: 0
+#### Step: 0
 
 ```
 python setup.py install
 cd mnist
 ```
 
-### Step: 1
+#### Step: 1
 
 ```
 python train_wgangp.py --training_label 1 --seed 2 --n_epochs 20
 ```
 
-### Step: 2
+#### Step: 2
 
 ```
 python train_encoder_izif.py --training_label 1 --seed 2 --n_epochs 20
 ```
 
-### Step: 3
+#### Step: 3
 
 ```
 python test_anomaly_detection.py --training_label 1
@@ -60,7 +62,7 @@ After Step: 3, `score.csv` will be generated in the directory `results`.
 
 See [f-AnoGAN_MNIST.ipynb](https://colab.research.google.com/drive/1mnuMH2gZH5RR47haP9r8Rv568G1mjJ1T?usp=sharing) about data visualization for `score.csv`.
 
-### Step: 4
+#### Step: 4
 
 ```
 python save_compared_images.py --seed 4 --n_iters 0 --n_grid_lines 10
@@ -68,12 +70,63 @@ python save_compared_images.py --seed 4 --n_iters 0 --n_grid_lines 10
 
 Compared images are saved under `f-AnoGAN/mnist/results/images_diff`.
 
-### Visualization
+#### Visualization
 
 ![ROC AUC](./images/mnist_roc_auc.png)
 ![PR AUC](./images/mnist_pr_auc.png)
 ![Anomaly Scores](./images/mnist_anomaly_scores.png)
 ![Compared Images](./images/mnist_compared_images.png)
+
+### Your own dataset
+
+Please run below in order.
+
+#### Step: 0
+
+```
+python setup.py install
+cd your_own_dataset
+```
+
+Add your own dataset under `f-AnoGAN/your_own_dataset`
+
+#### Step: 1
+
+Please replace `your_own_dataset_dir_name/train_dir_name` with a relative path of your own training data.
+
+```
+python train_wgangp.py "your_own_dataset_dir_name/train_dir_name"
+```
+
+#### Step: 2
+
+Please replace `your_own_dataset_dir_name/train_dir_name` with a relative path of your own training data.
+
+```
+python train_encoder_izif.py "your_own_dataset_dir_name/train_dir_name"
+```
+
+#### Step: 3
+
+Please replace `your_own_dataset_dir_name/test_dir_name` with a relative path of your own test data.
+
+```
+python test_anomaly_detection.py "your_own_dataset_dir_name/test_dir_name"
+```
+
+After Step: 3, `score.csv` will be generated in the directory `results`.
+
+See [f-AnoGAN_MNIST.ipynb](https://colab.research.google.com/drive/1mnuMH2gZH5RR47haP9r8Rv568G1mjJ1T?usp=sharing) about data visualization for `score.csv`.
+
+#### Step: 4
+
+Please replace `your_own_dataset_dir_name/test_dir_name` with a relative path of your own test data.
+
+```
+python save_compared_images.py "your_own_dataset_dir_name/test_dir_name" --n_iters 0 --n_grid_lines 10
+```
+
+Compared images are saved under `f-AnoGAN/your_own_dataset/results/images_diff`.
 
 ## Colaboratory
 
