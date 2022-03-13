@@ -116,8 +116,6 @@ python test_anomaly_detection.py "your_own_dataset_dir_name/test_dir_name"
 
 After Step: 3, `score.csv` will be generated in the directory `results`.
 
-See [f-AnoGAN_MNIST.ipynb](https://colab.research.google.com/drive/1mnuMH2gZH5RR47haP9r8Rv568G1mjJ1T?usp=sharing) about data visualization for `score.csv`.
-
 #### Step: 4
 
 Please replace `your_own_dataset_dir_name/test_dir_name` with a relative path of your own test data.
