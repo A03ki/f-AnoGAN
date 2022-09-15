@@ -11,11 +11,14 @@ from model import Generator, Encoder
 def main(opt):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    transform = transforms.Compose([transforms.Resize([opt.img_size]*2),
-                                    transforms.RandomHorizontalFlip(),
-                                    transforms.ToTensor(),
-                                    transforms.Normalize([0.5, 0.5, 0.5],
-                                                         [0.5, 0.5, 0.5])])
+    pipeline = [transforms.Resize([opt.img_size]*2),
+                transforms.RandomHorizontalFlip()]
+    if opt.channels == 1:
+        pipeline.append(transforms.Grayscale())
+    pipeline.extend([transforms.ToTensor(),
+                     transforms.Normalize([0.5]*opt.channels, [0.5]*opt.channels)])
+
+    transform = transforms.Compose(pipeline)
     mvtec_ad = MVTecAD(".", opt.dataset_name, train=False, transform=transform,
                        download=True)
     test_dataloader = DataLoader(mvtec_ad, batch_size=opt.n_grid_lines,
@@ -50,7 +53,7 @@ if __name__ == "__main__":
     parser.add_argument("--img_size", type=int, default=64,
                         help="size of each image dimension")
     parser.add_argument("--channels", type=int, default=3,
-                        help="number of image channels")
+                        help="number of image channels (If set to 1, convert image to grayscale)")
     parser.add_argument("--n_iters", type=int, default=None,
                         help="value of stopping iterations")
     opt = parser.parse_args()
