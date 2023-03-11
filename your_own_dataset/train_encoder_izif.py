@@ -19,6 +19,14 @@ def main(opt):
     train_dataset = ImageFolder(opt.train_root, transform=train_transform)
     train_dataloader = DataLoader(train_dataset, batch_size=opt.batch_size,
                                   shuffle=True)
+    if opt.valid_root is not None:
+        valid_transform = create_transform(opt.img_size, opt.channels,
+                                           has_random_horizontal_flip=False)
+        valid_dataset = ImageFolder(opt.valid_root, transform=valid_transform)
+        valid_dataloader = DataLoader(valid_dataset, batch_size=opt.batch_size,
+                                      shuffle=True)
+    else:
+        valid_dataloader = None
 
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
     from mvtec_ad.model import Generator, Discriminator, Encoder
@@ -28,7 +36,8 @@ def main(opt):
     encoder = Encoder(opt)
 
     train_encoder_izif(opt, generator, discriminator, encoder,
-                       train_dataloader, device)
+                       train_dataloader, device,
+                       valid_dataloader=valid_dataloader)
 
 
 """
@@ -44,6 +53,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("train_root", type=str,
                         help="root name of your dataset in train mode")
+    parser.add_argument("--valid_root", type=str, default=None,
+                        help="root name of your dataset in validation mode")
     parser.add_argument("--force_download", "-f", action="store_true",
                         help="flag of force download")
     parser.add_argument("--n_epochs", type=int, default=200,
