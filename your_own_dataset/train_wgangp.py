@@ -3,10 +3,10 @@ import sys
 
 import torch
 from torch.utils.data import DataLoader
-import torchvision.transforms as transforms
 from torchvision.datasets import ImageFolder
 
 from fanogan.train_wgangp import train_wgangp
+from fanogan.utils import create_transform
 
 
 def main(opt):
@@ -14,16 +14,10 @@ def main(opt):
         torch.manual_seed(opt.seed)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    pipeline = [transforms.Resize([opt.img_size]*2),
-                transforms.RandomHorizontalFlip()]
-    if opt.channels == 1:
-        pipeline.append(transforms.Grayscale())
-    pipeline.extend([transforms.ToTensor(),
-                     transforms.Normalize([0.5]*opt.channels, [0.5]*opt.channels)])
-
-    transform = transforms.Compose(pipeline)
-    dataset = ImageFolder(opt.train_root, transform=transform)
-    train_dataloader = DataLoader(dataset, batch_size=opt.batch_size,
+    train_transform = create_transform(opt.img_size, opt.channels,
+                                       has_random_horizontal_flip=True)
+    train_dataset = ImageFolder(opt.train_root, transform=train_transform)
+    train_dataloader = DataLoader(train_dataset, batch_size=opt.batch_size,
                                   shuffle=True)
 
     sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
