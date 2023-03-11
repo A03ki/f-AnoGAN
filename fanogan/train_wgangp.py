@@ -31,7 +31,7 @@ def compute_gradient_penalty(D, real_samples, fake_samples, device):
 
 
 def train_wgangp(opt, generator, discriminator,
-                 dataloader, device, lambda_gp=10):
+                 train_dataloader, device, lambda_gp=10, valid_dataloader=None):
     generator.to(device)
     discriminator.to(device)
 
@@ -40,76 +40,104 @@ def train_wgangp(opt, generator, discriminator,
     optimizer_D = torch.optim.Adam(discriminator.parameters(),
                                    lr=opt.lr, betas=(opt.b1, opt.b2))
 
-    os.makedirs("results/images", exist_ok=True)
+    os.makedirs("results/train_images", exist_ok=True)
+    os.makedirs("results/valid_images", exist_ok=True)
+
+    for epoch in range(opt.n_epochs):
+        # Train mode
+        _run_model_on_epoch(opt, generator, discriminator, train_dataloader,
+                            "results/train_images/", lambda_gp, epoch, device,
+                            optimizer_D=optimizer_D, optimizer_G=optimizer_G,
+                            train_mode=True)
+        # Validation mode
+        if valid_dataloader is not None:
+            _run_model_on_epoch(opt, generator, discriminator, valid_dataloader,
+                                "results/valid_images/", lambda_gp, epoch,device)
+
+    torch.save(generator.state_dict(), "results/generator")
+    torch.save(discriminator.state_dict(), "results/discriminator")
+
+
+def _run_model_on_epoch(opt, generator, discriminator, dataloader,
+                        output_dirpath, lambda_gp, current_epoch, device,
+                        optimizer_D=None, optimizer_G=None, train_mode=False):
+    generator.train(train_mode)
+    discriminator.train(train_mode)
+
+    if train_mode:
+        mode_tag = "[Train]"
+    else:
+        mode_tag = "[Valid]"
 
     padding_epoch = len(str(opt.n_epochs))
     padding_i = len(str(len(dataloader)))
 
     batches_done = 0
-    for epoch in range(opt.n_epochs):
-        for i, (imgs, _)in enumerate(dataloader):
+    for i, (imgs, _)in enumerate(dataloader):
 
-            # Configure input
-            real_imgs = imgs.to(device)
+        # Configure input
+        real_imgs = imgs.to(device)
 
-            # ---------------------
-            #  Train Discriminator
-            # ---------------------
+        # ---------------------
+        #  Train Discriminator
+        # ---------------------
 
+        if optimizer_D is not None:
             optimizer_D.zero_grad()
 
-            # Sample noise as generator input
-            z = torch.randn(imgs.shape[0], opt.latent_dim, device=device)
+        # Sample noise as generator input
+        z = torch.randn(imgs.shape[0], opt.latent_dim, device=device)
 
-            # Generate a batch of images
-            fake_imgs = generator(z)
+        # Generate a batch of images
+        fake_imgs = generator(z)
 
-            # Real images
-            real_validity = discriminator(real_imgs)
-            # Fake images
-            fake_validity = discriminator(fake_imgs.detach())
-            # Gradient penalty
-            gradient_penalty = compute_gradient_penalty(discriminator,
-                                                        real_imgs.data,
-                                                        fake_imgs.data,
-                                                        device)
-            # Adversarial loss
-            d_loss = (-torch.mean(real_validity) + torch.mean(fake_validity)
-                      + lambda_gp * gradient_penalty)
+        # Real images
+        real_validity = discriminator(real_imgs)
+        # Fake images
+        fake_validity = discriminator(fake_imgs.detach())
+        # Gradient penalty
+        gradient_penalty = compute_gradient_penalty(discriminator,
+                                                    real_imgs.data,
+                                                    fake_imgs.data,
+                                                    device)
+        # Adversarial loss
+        d_loss = (-torch.mean(real_validity) + torch.mean(fake_validity)
+                    + lambda_gp * gradient_penalty)
 
+        if optimizer_D is not None:
             d_loss.backward()
             optimizer_D.step()
 
+        if optimizer_G is not None:
             optimizer_G.zero_grad()
 
-            # Train the generator and output log every n_critic steps
-            if i % opt.n_critic == 0:
+        # Train the generator and output log every n_critic steps
+        if i % opt.n_critic == 0:
 
-                # -----------------
-                #  Train Generator
-                # -----------------
+            # -----------------
+            #  Train Generator
+            # -----------------
 
-                # Generate a batch of images
-                fake_imgs = generator(z)
-                # Loss measures generator's ability to fool the discriminator
-                # Train on fake images
-                fake_validity = discriminator(fake_imgs)
-                g_loss = -torch.mean(fake_validity)
+            # Generate a batch of images
+            fake_imgs = generator(z)
+            # Loss measures generator's ability to fool the discriminator
+            # Train on fake images
+            fake_validity = discriminator(fake_imgs)
+            g_loss = -torch.mean(fake_validity)
 
+            if optimizer_G is not None:
                 g_loss.backward()
                 optimizer_G.step()
 
-                print(f"[Epoch {epoch:{padding_epoch}}/{opt.n_epochs}] "
-                      f"[Batch {i:{padding_i}}/{len(dataloader)}] "
-                      f"[D loss: {d_loss.item():3f}] "
-                      f"[G loss: {g_loss.item():3f}]")
+            print(f"{mode_tag} "
+                  f"[Epoch {current_epoch:{padding_epoch}}/{opt.n_epochs}] "
+                  f"[Batch {i:{padding_i}}/{len(dataloader)}] "
+                  f"[D loss: {d_loss.item():3f}] "
+                  f"[G loss: {g_loss.item():3f}]")
 
-                if batches_done % opt.sample_interval == 0:
-                    save_image(fake_imgs.data[:25],
-                               f"results/images/{batches_done:06}.png",
-                               nrow=5, normalize=True)
+            if batches_done % opt.sample_interval == 0:
+                save_image(fake_imgs.data[:25],
+                           os.path.join(output_dirpath, f"{batches_done:06}.png"),
+                           nrow=5, normalize=True)
 
-                batches_done += opt.n_critic
-
-    torch.save(generator.state_dict(), "results/generator")
-    torch.save(discriminator.state_dict(), "results/discriminator")
+            batches_done += opt.n_critic
