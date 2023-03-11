@@ -100,12 +100,24 @@ Please replace `your_own_dataset_dir_name/train_dir_name` with a relative path o
 python train_wgangp.py "your_own_dataset_dir_name/train_dir_name"
 ```
 
+You can also specify a dataset for validation. Please replace `your_own_dataset_dir_name/valid_dir_name` with a relative path of your own validation data.
+
+```
+python train_wgangp.py "your_own_dataset_dir_name/train_dir_name" --valid_root "your_own_dataset_dir_name/valid_dir_name"
+```
+
 #### Step: 2
 
 Please replace `your_own_dataset_dir_name/train_dir_name` with a relative path of your own training data.
 
 ```
 python train_encoder_izif.py "your_own_dataset_dir_name/train_dir_name"
+```
+
+You can also specify a dataset for validation. Please replace `your_own_dataset_dir_name/valid_dir_name` with a relative path of your own validation data.
+
+```
+python train_encoder_izif.py "your_own_dataset_dir_name/train_dir_name" --valid_root "your_own_dataset_dir_name/valid_dir_name"
 ```
 
 #### Step: 3

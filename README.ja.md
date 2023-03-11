@@ -97,12 +97,24 @@ cd your_own_dataset
 python train_wgangp.py "your_own_dataset_dir_name/train_dir_name"
 ```
 
+検証用のデータセットを指定することもできます。`your_own_dataset_dir_name/valid_dir_name` は自分の検証用のデータセットのパスに置き換えて実行してください。
+
+```
+python train_wgangp.py "your_own_dataset_dir_name/train_dir_name" --valid_root "your_own_dataset_dir_name/valid_dir_name"
+```
+
 #### Step: 2
 
 `your_own_dataset_dir_name/train_dir_name` は自分のトレーニング用のデータセットのパスに置き換えて実行してください。
 
 ```
 python train_encoder_izif.py "your_own_dataset_dir_name/train_dir_name"
+```
+
+検証用のデータセットを指定することもできます。`your_own_dataset_dir_name/valid_dir_name` は自分の検証用のデータセットのパスに置き換えて実行してください。
+
+```
+python train_encoder_izif.py "your_own_dataset_dir_name/train_dir_name" --valid_root "your_own_dataset_dir_name/valid_dir_name"
 ```
 
 #### Step: 3
