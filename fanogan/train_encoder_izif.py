@@ -57,8 +57,9 @@ def _run_model_on_epoch(opt, generator, discriminator, encoder, criterion,
 
     padding_epoch = len(str(opt.n_epochs))
     padding_i = len(str(len(dataloader)))
+    current_batches_done = (((len(dataloader) - 1) // opt.n_critic + 1)
+                            * opt.n_critic * current_epoch)
 
-    batches_done = 0
     for i, (imgs, _) in enumerate(dataloader):
 
         # Configure input
@@ -98,11 +99,12 @@ def _run_model_on_epoch(opt, generator, discriminator, encoder, criterion,
                   f"[Batch {i:{padding_i}}/{len(dataloader)}] "
                   f"[E loss: {e_loss.item():3f}]")
 
-            if batches_done % opt.sample_interval == 0:
+            if current_batches_done % opt.sample_interval == 0:
                 fake_z = encoder(fake_imgs)
                 reconfiguration_imgs = generator(fake_z)
                 save_image(reconfiguration_imgs.data[:25],
-                           os.path.join(output_dirpath, f"{batches_done:06}.png"),
+                           os.path.join(output_dirpath,
+                                        f"{current_batches_done:06}.png"),
                            nrow=5, normalize=True)
 
-            batches_done += opt.n_critic
+            current_batches_done += opt.n_critic
